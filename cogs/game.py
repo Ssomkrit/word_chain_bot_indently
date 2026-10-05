@@ -314,10 +314,10 @@ The chain has **not** been broken. Please enter another word.''')
                 # Query only languages where word would be valid.
                 futures = self.common.start_api_queries(word, valid_languages)
                 
-            # -------------
-            # Wrong member
-            # -------------
-            if not SETTINGS.single_player and config.game_state[game_mode].last_member_id == message.author.id:
+        # -------------
+        # Wrong member
+        # -------------
+        if not SETTINGS.single_player and config.game_state[game_mode].last_member_id == message.author.id:
             response: str = f'''{message.author.mention} messed up the count! \
 *You cannot send two words in a row!*
 {f'The chain length was {config.game_state[game_mode].current_count} when it was broken. :sob:\n' if config.game_state[game_mode].current_count > 0 else ''}\
