@@ -561,14 +561,14 @@ The chain has **not** been broken. Please enter another word.\n
     # ---------------------------------------------------------------------------------------------------------------
 
     @staticmethod
-def get_chain_ending(word: str, game_mode: GameMode) -> str:
-    """Return the last meaningful letters used for the word-chain rule."""
-    word = word.lower()
+    def get_chain_ending(word: str, game_mode: GameMode) -> str:
+        """Return the last meaningful letters used for the word-chain rule."""
+        word = word.lower()
 
-    while word.endswith('й'):
-        word = word[:-1]
+        while word.endswith('й'):
+            word = word[:-1]
 
-    return word[-game_mode.value:]
+        return word[-game_mode.value:]
     
     @staticmethod
     def calculate_word_score(word: str, game_mode: GameMode, language: Language) -> float:
