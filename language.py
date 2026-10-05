@@ -103,6 +103,7 @@ SH_FIRST_TOKEN_SCORES: dict[GameMode, defaultdict[str, float]] = load_token_scor
 HU_FIRST_TOKEN_SCORES: dict[GameMode, defaultdict[str, float]] = load_token_scores_from_json('hu')
 RO_FIRST_TOKEN_SCORES: dict[GameMode, defaultdict[str, float]] = load_token_scores_from_json('ro')
 TR_FIRST_TOKEN_SCORES: dict[GameMode, defaultdict[str, float]] = load_token_scores_from_json('tr')
+RU_FIRST_TOKEN_SCORES: dict[GameMode, defaultdict[str, float]] = load_token_scores_from_json('ru')
 
 
 class Language(Enum):
@@ -131,7 +132,12 @@ class Language(Enum):
     HUNGARIAN = LanguageInfo(code='hu', code_long="hun", allowed_word_regex=HU_REGEX, first_token_scores=HU_FIRST_TOKEN_SCORES)
     ROMANIAN = LanguageInfo(code='ro', code_long="ron", allowed_word_regex=RO_REGEX, first_token_scores=RO_FIRST_TOKEN_SCORES)
     TURKISH = LanguageInfo(code='tr', code_long="tur", allowed_word_regex=TR_REGEX, first_token_scores=TR_FIRST_TOKEN_SCORES)
-    RUSSIAN = LanguageInfo(code='ru', code_long="rus", allowed_word_regex=RU_REGEX)
+    RUSSIAN = LanguageInfo(
+    code='ru',
+    code_long="rus",
+    allowed_word_regex=RU_REGEX,
+    first_token_scores=RU_FIRST_TOKEN_SCORES
+)
     
     @classmethod
     def from_language_code(cls, code: str):
