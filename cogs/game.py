@@ -344,22 +344,25 @@ current high score of **{config.game_state[game_mode].high_score}**!'''
     await connection.commit()
     return
             
-            # -------------------------
+                        # -------------------------
             # Wrong starting letter
             # -------------------------
-            if (config.game_state[game_mode].current_word and
-                word[:game_mode.value] !=
-                self.get_chain_ending(config.game_state[game_mode].current_word, game_mode)):
-                    
-                response: str = f'''{message.author.mention} messed up the chain! \
-*The word you entered did not begin with the last letter of the previous word* (**{self.get_chain_ending(config.game_state[game_mode].current_word, game_mode)}**).
+            if config.game_state[game_mode].current_word:
+                chain_ending = self.get_chain_ending(
+                    config.game_state[game_mode].current_word,
+                    game_mode
+                )
+
+                if word[:game_mode.value] != chain_ending:
+                    response: str = f'''{message.author.mention} messed up the chain! \
+*The word you entered did not begin with the last letter of the previous word* (**{chain_ending}**).
 {f'The chain length was {config.game_state[game_mode].current_count} when it was broken. :sob:\n' if config.game_state[game_mode].current_count > 0 else ''}\
-Restart with a word starting with **{self.get_chain_ending(config.game_state[game_mode].current_word, game_mode)}** and try to beat the \
+Restart with a word starting with **{chain_ending}** and try to beat the \
 current high score of **{config.game_state[game_mode].high_score}**!'''
 
-                await self.handle_mistake(message, response, connection, game_mode)
-                await connection.commit()
-                return
+                    await self.handle_mistake(message, response, connection, game_mode)
+                    await connection.commit()
+                    return
 
             # ----------------------------------
             # Check if word is valid (contd.)
