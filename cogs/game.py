@@ -315,18 +315,34 @@ The chain has **not** been broken. Please enter another word.''')
                 futures = self.common.start_api_queries(word, valid_languages)
 
             # -------------
-            # Wrong member
-            # -------------
-            if not SETTINGS.single_player and config.game_state[game_mode].last_member_id == message.author.id:
-                response: str = f'''{message.author.mention} messed up the count! \
+# Wrong member
+# -------------
+if not SETTINGS.single_player and config.game_state[game_mode].last_member_id == message.author.id:
+    response: str = f'''{message.author.mention} messed up the count! \
 *You cannot send two words in a row!*
 {f'The chain length was {config.game_state[game_mode].current_count} when it was broken. :sob:\n' if config.game_state[game_mode].current_count > 0 else ''}\
-Restart with a word starting with **{config.game_state[game_mode].current_word[-game_mode.value:]}** and \
+Restart with a word starting with **{self.get_chain_ending(config.game_state[game_mode].current_word, game_mode)}** and \
 try to beat the current high score of **{config.game_state[game_mode].high_score}**!'''
 
-                await self.handle_mistake(message, response, connection, game_mode)
-                await connection.commit()
-                return
+    await self.handle_mistake(message, response, connection, game_mode)
+    await connection.commit()
+    return
+
+# -------------------------
+# Wrong starting letter
+# -------------------------
+if (config.game_state[game_mode].current_word and word[:game_mode.value] !=
+        self.get_chain_ending(config.game_state[game_mode].current_word, game_mode)):
+
+    response: str = f'''{message.author.mention} messed up the chain! \
+*The word you entered did not begin with the last letter of the previous word* (**{self.get_chain_ending(config.game_state[game_mode].current_word, game_mode)}**).
+{f'The chain length was {config.game_state[game_mode].current_count} when it was broken. :sob:\n' if config.game_state[game_mode].current_count > 0 else ''}\
+Restart with a word starting with **{self.get_chain_ending(config.game_state[game_mode].current_word, game_mode)}** and try to beat the \
+current high score of **{config.game_state[game_mode].high_score}**!'''
+
+    await self.handle_mistake(message, response, connection, game_mode)
+    await connection.commit()
+    return
 
             # -------------------------
             # Wrong starting letter
@@ -569,7 +585,7 @@ def get_chain_ending(word: str, game_mode: GameMode) -> str:
     @staticmethod
     def calculate_word_score(word: str, game_mode: GameMode, language: Language) -> float:
         if re.match(language.value.allowed_word_regex, word):
-            end_token = word[-game_mode.value:]
+            end_token = GameCog.get_chain_ending(word, game_mode)
             return language.value.first_token_scores[game_mode][end_token]
         return 0.0
 
