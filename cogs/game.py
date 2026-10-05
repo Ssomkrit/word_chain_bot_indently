@@ -348,9 +348,9 @@ current high score of **{config.game_state[game_mode].high_score}**!'''
             # Wrong starting letter
             # -------------------------
             if (config.game_state[game_mode].current_word and
-                    word[:game_mode.value] !=
-                    self.get_chain_ending(config.game_state[game_mode].current_word, game_mode)):
-
+                word[:game_mode.value] !=
+                self.get_chain_ending(config.game_state[game_mode].current_word, game_mode)):
+                    
                 response: str = f'''{message.author.mention} messed up the chain! \
 *The word you entered did not begin with the last letter of the previous word* (**{self.get_chain_ending(config.game_state[game_mode].current_word, game_mode)}**).
 {f'The chain length was {config.game_state[game_mode].current_count} when it was broken. :sob:\n' if config.game_state[game_mode].current_count > 0 else ''}\
