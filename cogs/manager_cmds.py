@@ -635,8 +635,6 @@ to the other game mode!''')
             if guild is None:
                 return []
 
-            await self.cog.common.ensure_config(guild)
-
             config = self.cog.common.server_configs[guild.id]
             already_assigned_languages = config.languages
 
