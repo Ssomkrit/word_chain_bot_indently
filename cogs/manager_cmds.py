@@ -630,11 +630,14 @@ to the other game mode!''')
 
         # ------------------------------------------------------------------------------------------------------------
 
-        async def _autocomplete_add_language(self, interaction: Interaction, value: str) -> list[Choice[str]]:
-            guild = interaction.guild
-            if guild is None:
-                return []
-            config = self.cog.common.server_configs[guild.id]
+            async def _autocomplete_add_language(self, interaction: Interaction, value: str) -> list[Choice[str]]:
+        guild = interaction.guild
+        if guild is None:
+            return []
+
+        await self.cog.common.ensure_config(guild)
+
+        config = self.cog.common.server_configs[guild.id]
             already_assigned_languages = config.languages
             values = [l.value.code for l in Language if l.value.code.startswith(value.lower()) and l not in already_assigned_languages][:25]
             return [Choice[str](name=v, value=v) for v in values]
